@@ -14,10 +14,34 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# Import custom transformers so joblib can unpickle the pipeline
-import src.features  # noqa: F401
-import src.models  # noqa: F401
-from src.config import BUDA_DISTRICTS, CENTRE_DISTRICTS
+# Import EVERY custom class by name before unpickling (required on Streamlit Cloud)
+from src.features import (  # noqa: E402
+    AmenityFlags,
+    ColumnSelector,
+    DistrictFlags,
+    DistrictRentEncoder,
+    FloorFeatures,
+    GeoDistanceFeatures,
+    InteractionFeatures,
+    SizeFeatures,
+    build_preprocessor,
+    haversine_km,
+)
+from src.config import BUDA_DISTRICTS, CENTRE_DISTRICTS  # noqa: E402
+
+# Keep references so pickle can resolve them
+_CUSTOM_CLASSES = (
+    AmenityFlags,
+    ColumnSelector,
+    DistrictFlags,
+    DistrictRentEncoder,
+    FloorFeatures,
+    GeoDistanceFeatures,
+    InteractionFeatures,
+    SizeFeatures,
+    build_preprocessor,
+    haversine_km,
+)
 
 MODEL_PATH = ROOT / "models" / "best_model.joblib"
 
@@ -32,13 +56,22 @@ st.caption(
 @st.cache_resource
 def load_model():
     if not MODEL_PATH.exists():
-        return None
-    return joblib.load(MODEL_PATH)
+        return None, f"Model file missing at {MODEL_PATH}"
+    try:
+        return joblib.load(MODEL_PATH), None
+    except Exception as e:  # noqa: BLE001
+        return None, f"{type(e).__name__}: {e}"
 
 
-model = load_model()
+model, load_error = load_model()
 if model is None:
-    st.warning("No trained model found. Run: `python -m src.train --model best`")
+    st.error("Could not load the trained model.")
+    if load_error:
+        st.code(load_error)
+    st.info(
+        "On Streamlit Cloud, reboot the app after updating requirements "
+        "(scikit-learn==1.6.1). Locally run: `python -m src.train --model best`"
+    )
     st.stop()
 
 with st.form("listing"):
@@ -60,8 +93,12 @@ with st.form("listing"):
             ["gáz-cirkó", "gáz konvektor", "házközponti", "távhő", "elektromos", "missing"],
             index=0,
         )
-        furnished = st.selectbox("Furnished", ["igen", "nem", "megegyezés szerint", "missing"], index=1)
-        balcony = st.selectbox("Garden / balcony proxy", ["van", "nincs", "igen", "nem", "missing"], index=0)
+        furnished = st.selectbox(
+            "Furnished", ["igen", "nem", "megegyezés szerint", "missing"], index=1
+        )
+        balcony = st.selectbox(
+            "Garden / balcony proxy", ["van", "nincs", "igen", "nem", "missing"], index=0
+        )
         elevator = st.selectbox("Elevator", ["van", "nincs", "missing"], index=0)
 
     submitted = st.form_submit_button("Estimate monthly rent (HUF)")
@@ -98,7 +135,7 @@ if submitted:
             "Prediction is back-transformed from log-rent (approx. conditional median)."
         )
     except Exception as e:  # noqa: BLE001
-        st.error(f"Prediction failed: {e}")
+        st.error(f"Prediction failed: {type(e).__name__}: {e}")
 
 st.markdown("---")
 st.markdown(

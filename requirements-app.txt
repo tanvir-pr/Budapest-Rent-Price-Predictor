@@ -1,7 +1,7 @@
-# Slim deps for Streamlit Community Cloud (inference only)
-numpy>=1.24
-pandas>=2.0
-scikit-learn>=1.3
-streamlit>=1.28
-joblib>=1.3
-scipy>=1.11
+# Pinned for Streamlit Community Cloud (must match trained model)
+numpy==2.1.3
+pandas==2.2.3
+scikit-learn==1.6.1
+scipy==1.15.3
+joblib==1.4.2
+streamlit==1.45.1
