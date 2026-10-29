@@ -1,0 +1,9 @@
+column,decision,reason
+rent,target; train on log1p; metrics in HUF,"After cleaning: 2291 rows (dropped 33 missing rent/size, 13 domain errors, 507 near-duplicates)."
+size_m2,keep; add log_size and bands,primary driver
+rooms_total,keep numeric; optional cap 5+,monotonic then flat
+district_num,one-hot + fold district median rpm,location is strongest after size
+floor,keep + ground/top flags,EDA floor effect
+condition/heating/etc,impute + one-hot / amenities,quality premium
+rent_per_m2,EDA only — NEVER as model input,target leakage
+near-duplicates,collapse; GroupKFold on group_key,prevent leakage

@@ -1,0 +1,5 @@
+1. Final test MAE=37,937 HUF, RMSE=69,399, R²=0.783.
+2. Largest errors concentrate in rare district/size combinations and luxury tails.
+3. Small flats often have higher rent/m²; model under/over-shoots when amenities dominate.
+4. Centre districts have lower relative MdAPE than outer districts with sparse data.
+5. Retransformed log predictions track the median rent better than the mean.

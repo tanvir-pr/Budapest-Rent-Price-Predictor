@@ -1,0 +1,18 @@
+canonical,source_column,dtype,example,nunique,missing_pct
+listing_id,url,object,https://ingatlan.jofogas.hu/budapest/07_01_tol_belvarosi__2_szobas_berendezett_l,2844,0.0
+rent,price,float64,148000.0,348,1.13
+size_m2,size,float64,60.0,166,0.04
+rooms,rooms,float64,2.0,6,0.04
+district,location_str,object,"   Budapest, XIV. kerület, Istvánmező, Thököly út   ",1615,0.0
+condition,condition,object,új építésű,6,2.92
+heating,heating_type,object,egyedi mérős központifűtés,10,0.14
+furnished,furniture,object,igen,4,3.48
+elevator,elevator,object,van,3,0.14
+balcony,garden,object,nem,3,48.63
+view,view_type,object,panoráma,7,9.42
+description,description,object,"  Újnak LÁtszÓ (a valóságban 7 éves) BelvÁrosi (István Park Zugló) 56 + 5,3 m2-e",2795,0.0
+title,title,object,"07.01-től belvárosi, 2 szobás berendezett lakás kiadó!",2640,0.0
+common_cost,common_cost,object,15000  ft/hó,348,34.42
+animals,animals,object,nem,4,21.34
+property_type,type,object,tégla,4,0.21
+date_scraped,date_scraped,object,2018/05/06 14:50,115,0.0

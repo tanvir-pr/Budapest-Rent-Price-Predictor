@@ -1,0 +1,12 @@
+1. Loaded 2844 rows × 22 columns (10.6 MB); mapped target/features: {'listing_id': 'url', 'rent': 'price', 'size_m2': 'size', 'rooms': 'rooms', 'district': 'location_str', 'condition': 'condition', 'heating': 'heating_type', 'furnished': 'furniture', 'elevator': 'elevator', 'balcony': 'garden', 'view': 'view_type', 'description': 'description', 'title': 'title', 'common_cost': 'common_cost', 'animals': 'animals', 'property_type': 'type', 'date_scraped': 'date_scraped'}.
+2. Exact duplicate rows: 0.
+3. After cleaning: 2291 rows (dropped 33 missing rent/size, 13 domain errors, 507 near-duplicates).
+4. Rent is right-skewed (skew=3.77); log1p reduces skew to 1.12.
+5. Median rent/m² = 3,014 HUF (P5=1,964, P95=5,236).
+6. Spearman(size, log-rent) = 0.800 — size is a primary driver.
+7. Highest median rent district: 5 (246,500 HUF); listing counts vary widely.
+8. Buda share=30.7%, centre share=57.0% of rows with known district.
+9. size and rooms correlate (r=0.76) → multicollinearity; motivates Ridge/ElasticNet.
+10. IQR rule on log-rent flags 122 rows (5.3%); luxury tails kept for Huber vs OLS study.
+11. Condition categories show ordered rent medians (quality premium).
+12. Rent rises with rooms but flattens at the high end (diminishing returns).

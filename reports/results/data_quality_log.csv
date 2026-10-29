@@ -1,0 +1,4 @@
+issue,count,action
+missing_values,5883,impute median/mode in pipeline; drop rows missing rent or size
+exact_duplicates,0,drop exact duplicates; near-dup by district+size+rooms+floor keep median rent
+iqr_log_rent_outliers,122,keep; compare Huber vs OLS in modelling
